@@ -12,3 +12,4 @@ C:\Users\bigas\Downloads\Faculdade\C#\Calculadora\Calculadora\obj\Debug\net9.0\r
 C:\Users\bigas\Downloads\Faculdade\C#\Calculadora\Calculadora\obj\Debug\net9.0\Calculadora.pdb
 C:\Users\bigas\Downloads\Faculdade\C#\Calculadora\Calculadora\obj\Debug\net9.0\Calculadora.genruntimeconfig.cache
 C:\Users\bigas\Downloads\Faculdade\C#\Calculadora\Calculadora\obj\Debug\net9.0\ref\Calculadora.dll
+C:\Users\bigas\Downloads\Faculdade\C#\Calculadora\Calculadora\obj\Debug\net9.0\Calculadora.sourcelink.json
