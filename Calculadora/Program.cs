@@ -3,60 +3,21 @@
 class Program
 {
 
-    public static void Menu()
+    public static void MenuPrincipal()
     {   
         Console.WriteLine("\n1 - Nova Operação");
         Console.WriteLine("2 - Ver Histórico");
         Console.WriteLine("3 - Apagar Histórico");
-        Console.WriteLine("4 - Ajuda");
-        Console.WriteLine("5 - Sair");
+        Console.WriteLine("4 - Salvar Histórico");
+        Console.WriteLine("5 - Ajuda");
+        Console.WriteLine("6 - Sair");
        
-        string escolha = Console.ReadLine() ?? "";
-        switch (escolha)
-        {
-            case "1":
-                Calculadora();
-                
-                string operacao = "";
-
-                // Primeiro número
-                double num1 = InserirValor(operacao);
-
-                // Operação
-                operacao = InserirOperacao();
-
-                // Segundo número
-                double num2 = InserirValor(operacao);
-
-                double resultado = Contas(num1, num2, operacao);
-
-                Console.WriteLine($"Resultado: {resultado}");
-
-                break;
-            case "2":
-                MostrarHistorico();
-                break;
-            case "3":
-                historico.Clear(); 
-                Console.WriteLine("Histórico apagado com sucesso!");
-                break;
-            case "4":
-                MenuAjuda();
-                break;
-            case "5":
-                Console.WriteLine("Obrigado por utilizar o programa!");
-                Environment.Exit(0);
-                break;
-            default:
-                Console.WriteLine("Escolha uma opção valida");
-                break;
-        }
     }
-    public static void Calculadora()
+    public static void MenuCalculadora()
     {
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine("\n╔═══════════════╗");
-        Console.WriteLine("║   | q | r | / ║");
+        Console.WriteLine("║ % | q | r | / ║");
         Console.WriteLine("║ 7 | 8 | 9 | x ║");
         Console.WriteLine("║ 4 | 5 | 6 | - ║");
         Console.WriteLine("║ 1 | 2 | 3 | + ║");
@@ -71,7 +32,7 @@ class Program
         Console.WriteLine("+ : Soma           |  - : Subtração");
         Console.WriteLine("x : Multiplicação  |  / : Divisão");
         Console.WriteLine("q : Quadrado       |  r : Raiz");
-        Console.WriteLine("f : Fatorial       |  ^ : Potência");
+        Console.WriteLine("% : Porcentagem    |  ^ : Potência");
         Console.WriteLine("\nGuia de uso");
         Console.WriteLine("1. Selecione a opção Nova Operação");
         Console.WriteLine("2. Insira o primeiro valor");
@@ -97,6 +58,12 @@ class Program
             }
     }
 
+    public static void SalvarHistorico()
+    {
+        File.WriteAllLines("historico.txt", historico);
+        Console.WriteLine("Histórico salvo em \\Calculadora\\bin\\Debug\\net9.0 'historico.txt'.");     
+    }
+    
     public static double Contas(double num1, double num2, string operacao)
     {
         double resultado = 0;
@@ -113,6 +80,11 @@ class Program
                 resultado = num1 * num2;
                 break;
             case "/":
+                if (num2 == 0)
+                {
+                    Console.WriteLine("Erro: Divisão por zero!");
+                    return double.NaN;
+                }
                 resultado = num1 / num2;
                 break;
             case "q":
@@ -124,6 +96,9 @@ class Program
             case "^":
                 resultado = Math.Pow(num1, num2);
                 break;
+            case "%":
+                resultado = num1 * (num2 / 100);
+                break;
 
         }
         if (operacao == "q" || operacao == "r") Historico(operacao, num1, null, resultado);
@@ -134,13 +109,18 @@ class Program
 
     public static double InserirValor(string operacao)
     {
-        double num = 0;
-        if (operacao != "q" && operacao != "r")
+        if (operacao == "q" || operacao == "r")
+            return 0;
+        
+        while (true)
         {
             Console.WriteLine("Valor:");
-            num = Convert.ToDouble(Console.ReadLine());
+            if (double.TryParse(Console.ReadLine(), out double num))
+                return num;
+            Console.WriteLine("Valor inválido. Digite um número.");
         }
-        return num;
+        
+        
     }
     public static string InserirOperacao()
     {
@@ -149,7 +129,7 @@ class Program
                 Console.WriteLine("Operação:");
                 string operacao = Console.ReadLine() ?? "";
                 if (operacao == "+" || operacao == "-" || operacao == "x"
-                || operacao == "/" || operacao == "q" || operacao == "r" || operacao == "^")
+                || operacao == "/" || operacao == "q" || operacao == "r" || operacao == "^" || operacao == "%")
                     return operacao;
                 else
                     Console.WriteLine("Insira uma operação valida segundo o menu");
@@ -161,8 +141,52 @@ class Program
         Console.WriteLine("Calcudora em C#, tenha bom uso!");
 
         while (true)
-        {   
-            Menu();         
+        {
+            MenuPrincipal();        
+            
+            string escolha = Console.ReadLine() ?? "";
+            switch (escolha)
+            {
+                case "1":
+                    MenuCalculadora();
+                
+                    string operacao = "";
+
+                    // Primeiro número
+                    double num1 = InserirValor(operacao);
+
+                    // Operação
+                    operacao = InserirOperacao();
+
+                    // Segundo número
+                    double num2 = InserirValor(operacao);
+
+                    double resultado = Contas(num1, num2, operacao);
+
+                    Console.WriteLine($"Resultado: {resultado:F2}");
+
+                    break;
+                case "2":
+                    MostrarHistorico();
+                    break;
+                case "3":
+                    historico.Clear(); 
+                    Console.WriteLine("Histórico apagado com sucesso!");
+                    break;
+                case "4":
+                    SalvarHistorico();
+                    break;
+                case "5":
+                    MenuAjuda();
+                    break;
+                case "6":
+                    Console.WriteLine("Obrigado por utilizar o programa!");
+                    Environment.Exit(0);
+                    break;
+                default:
+                    Console.WriteLine("Escolha uma opção valida do menu");
+                    break;
+            } 
         }
     }
 }
